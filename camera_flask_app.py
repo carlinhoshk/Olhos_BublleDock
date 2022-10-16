@@ -1,4 +1,5 @@
-from tkinter import Frame
+from fileinput import filename
+from tkinter import Frame, image_names
 from flask import Flask, render_template, Response, request
 import cv2
 import datetime, time
@@ -28,7 +29,7 @@ except OSError as error:
 net = cv2.dnn.readNetFromCaffe('./saved_model/deploy.prototxt.txt', './saved_model/res10_300x300_ssd_iter_140000.caffemodel')
 
 #instatiate flask app  
-app = Flask(__name__, template_folder='./templates')
+app = Flask(__name__, template_folder='./frontend/templates', static_folder="./frontend/static")
 
 contador = 1
 
@@ -154,7 +155,7 @@ def falaoi(x):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', image_names=filename )
     
     
 @app.route('/video_feed')
@@ -213,8 +214,8 @@ def tasks():
                           
                  
     elif request.method=='GET':
-        return render_template('index.html')
-    return render_template('index.html')
+        return render_template('index.html', image_names=filename)
+    return render_template('index.html', image_names=filename)
 
 
 if __name__ == '__main__':
