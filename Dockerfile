@@ -1,58 +1,30 @@
-ARG OPENCV_VERSION=4.3.0
-ARG NUMPY_VERSION=1.22.3
-
-FROM python:3.10.4-slim-buster AS base
-
-FROM base as build
-ARG OPENCV_VERSION
-ARG NUMPY_VERSION
-RUN apt-get update && apt-get -y install --no-install-recommends \
-	build-essential \
-	cmake \
-	gfortran \
-	libjpeg-dev \
-	libatlas-base-dev \
-	libavcodec-dev \
-	libavformat-dev \
-	libgtk2.0-dev \
-	libgtk-3-dev \
-	libswscale-dev \
-	libtiff-dev \
-	libv4l-dev \
-	libx264-dev \
-	libxvidcore-dev \
-	pkg-config \
-	wget
-RUN pip wheel numpy==${NUMPY_VERSION}
-RUN pip install numpy-*.whl
-RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz && \
-	tar xf ${OPENCV_VERSION}.tar.gz
-WORKDIR /opencv-${OPENCV_VERSION}/build
-RUN cmake -D CMAKE_BUILD_TYPE=RELEASE \
-	-D CMAKE_INSTALL_PREFIX=_install \
-	-D ENABLE_NEON=ON \
-	-D ENABLE_VFPV3=ON \
-	-D BUILD_TESTS=OFF \
-	-D OPENCV_ENABLE_NONFREE=ON \
-	-D INSTALL_PYTHON_EXAMPLES=OFF \
-	-D BUILD_EXAMPLES=OFF .. && \
-	make -j16
-RUN make install
+# Iniciando a base da image
+FROM ubuntu:14.04.3
 
 
-FROM base
-ARG OPENCV_VERSION
-RUN apt-get update && apt-get -y install --no-install-recommends \
-	libatlas3-base \
-	libavcodec58 \
-	libavformat58 \
-	libgtk-3-0 \
-	libswscale5 \
-&& rm -rf /var/lib/apt/lists/*
-COPY --from=build /numpy-*.whl /
-RUN pip install numpy-*.whl
-RUN pip install tkinter
-RUN pip install flask
-RUN pip install 
-COPY --from=build /opencv-${OPENCV_VERSION}/build/_install/ /usr/local/
-RUN ldconfig
+# installando as dependencias
+RUN apt-get update
+RUN apt-get install -y nginx supervisor
+RUN apt-get install -y python python-dev python-pip python-virtualenv
+RUN apt-get install -y python-opencv
+RUN apt-get install -y python-matplotlib
+RUN apt-get install -y python-scipy
+RUN apt-get install -y python-skimage
+RUN pip install uwsgi
+RUN pip install Flask
+
+
+
+# adicionando o workspace do flask
+ADD ./app /app
+ADD ./config /config
+
+# setup config
+RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
+
+RUN ln -s /config/nginx.conf /etc/nginx/sites-enabled/
+RUN ln -s /config/supervisor.conf /etc/supervisor/conf.d/
+
+EXPOSE 80
+CMD ["python", "app/camera_flask_app.py"]
