@@ -36,8 +36,8 @@ contador = 1
 
 #-banco-#
 #app_user #password
-connection = mysql.connector.connect(user='app_olhos', password='gtasandreas',
-                            host='127.0.0.1',
+connection = mysql.connector.connect(user='app_olhos', password='m9Ph!R8i3ySFjqb',
+                            host='db4free.net',
                             database='banco_casa')
 mycurso = connection.cursor()
                        
@@ -219,7 +219,7 @@ def tasks():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8080)
     
 camera.release()
 cv2.destroyAllWindows()     
