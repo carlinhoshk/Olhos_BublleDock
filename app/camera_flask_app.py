@@ -51,7 +51,7 @@ months = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho',
 weekdays = ['Segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo']
 
 
-camera = cv2.VideoCapture("ibmface.mp4")
+camera = cv2.VideoCapture("rtsp://192.168.15.7:554")
 
 def record(out):
     global rec_frame

@@ -8,21 +8,23 @@
 			
             <h2 class="mt-5">Central de Vigilancia Olhos de Convant </h2>
 			<h1>
-				<p>Camera Frontal Oliveira 1</p>
-				<img src=" {{url_for('static', filename= 'images/main_olhos.png')}}">
+				<p>Camera Frontal Oliveira 1 <img src="static/images/main_olhos.png" height=100 width=100></p>
+				
 				
 			</h1>	
-				
+			<img src="{{ url_for('video_feed') }}" height="80%" >
+
 			<form method="post" action="{{ url_for('tasks') }}">
-			<input type="submit" value="Stop/Start" name="stop" />
-			<input type="submit" value="Capture" name="click"/>
-			<input type="submit" value="Grey" name="grey" />
-			<input type="submit" value="Negative" name="neg" />
-			<input type="submit" value="Cadastro" name="cad" />
-			<input type="submit" value="Face Only" name="face" />
-			<input type="submit" value="Start/Stop Recording" name="rec" />
+			
+			<input class="btn" type="submit" value="Stop/Start" name="stop" />
+			<input class="btn" type="submit" value="Capture" name="click"/>
+			<input class="btn" type="submit" value="Grey" name="grey" />
+			<input class="btn" type="submit" value="Negative" name="neg" />
+			<input class="btn" type="submit" value="Cadastro" name="cad" />
+			<input class="btn" type="submit" value="Face Only" name="face" />
+			<input class="btn" type="submit" value="Start/Stop Recording" name="rec" />
 			</form>
-            <img src="{{ url_for('video_feed') }}" height="80%">
+            
 			<h3 style="font-family:courier;">Instructions:</h3>
 			<ol style="font-family:courier;">
 			<li>Parar/Iniciar -- Alterna entre parar ou iniciar a transmissão ao vivo</li>

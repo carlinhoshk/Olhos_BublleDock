@@ -1,5 +1,5 @@
 # Iniciando a base da image
-FROM python:3.6
+FROM python:3.9
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         tzdata \
